@@ -15,12 +15,11 @@ void main() {
   }).catchError((error) {
     debugPrint('Error initializing Firebase: $error');
   });
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -35,39 +34,72 @@ class MyApp extends StatelessWidget {
           title: const Text('Flutter Firebase Example'),
         ),
         body: Center(
-          child: ElevatedButton(
-            onPressed: () async {
-              try {
-                GooglAuth authService = GooglAuth();
+          child: Column(
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    GooglAuth authService = GooglAuth();
 
-                User? user = await authService.signInWithGoogle();
-                print(user!.email);
-                print(user.displayName);
-                print(user.photoURL);
+                    User? user = await authService.signInWithGoogle();
+                    print(user!.email);
+                    print(user.displayName);
+                    print(user.photoURL);
 
-                Get.dialog(
-                  AlertDialog(
-                    title: Text("Image Preview"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.network(
-                          user.photoURL!,
-                          height: 200,
-                          fit: BoxFit.cover,
+                    Get.dialog(
+                      AlertDialog(
+                        title: Text("Image Preview"),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.network(
+                              user.photoURL!,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(height: 10),
+                            Text("This is an image inside a dialog."),
+                          ],
                         ),
-                        SizedBox(height: 10),
-                        Text("This is an image inside a dialog."),
-                      ],
-                    ),
-                  ),
-                );
-              } catch (e) {
-                // Handle error
-                print('Error signing in: $e');
-              }
-            },
-            child: const Text('Initialize Firebase'),
+                      ),
+                    );
+                  } catch (e) {
+                    // Handle error
+                    print('Error signing in: $e');
+                  }
+                },
+                child: const Text('Google Sign In'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  GooglAuth authService = GooglAuth();
+                  User? user = authService.getCurrentUser();
+                  if (user != null) {
+                    print(user.email);
+                    print(user.displayName);
+                    print(user.photoURL);
+                  } else {
+                    print('No user is currently signed in.');
+                  }
+                },
+                child: const Text('Current User'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  GooglAuth authService = GooglAuth();
+
+                  authService.signOutGoogle();
+                  if (authService.getCurrentUser() != null) {
+                    print(authService.getCurrentUser()!.email);
+                    print(authService.getCurrentUser()!.displayName);
+                    print(authService.getCurrentUser()!.photoURL);
+                  } else {
+                    print('No user is currently signed in.');
+                  }
+                },
+                child: const Text('Sign Out'),
+              ),
+            ],
           ),
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GooglAuth {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _google_auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn =
       GoogleSignIn.instance; // Preferred way to get instance
 
@@ -14,6 +14,7 @@ class GooglAuth {
     _initializeGoogleSignIn();
   }
 
+  bool isconnected = false;
   Future<void> _initializeGoogleSignIn() async {
     if (!_isGoogleSignInInitialized) {
       try {
@@ -54,7 +55,7 @@ class GooglAuth {
       );
 
       final UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
+          await _google_auth.signInWithCredential(credential);
       print(credential);
       return userCredential.user;
     } on GoogleSignInException catch (e) {
@@ -69,15 +70,20 @@ class GooglAuth {
     }
   }
 
+// Get the current user
+  User? getCurrentUser() {
+    return _google_auth.currentUser;
+  }
+
   // Sign out
   Future<void> signOutGoogle() async {
     await _initializeGoogleSignIn(); // Ensure initialized before attempting sign-out
     await _googleSignIn.signOut();
-    await _auth.signOut();
+    await _google_auth.signOut();
     print('User signed out from Google and Firebase.');
   }
 
   Stream<User?> get user {
-    return _auth.authStateChanges();
+    return _google_auth.authStateChanges();
   }
 }
