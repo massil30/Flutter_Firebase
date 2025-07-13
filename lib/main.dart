@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_firebase/AuthGmail/signIn_service.dart';
 import 'firebase_options.dart';
+import 'package:get/get.dart';
 
 void main() {
   // Ensure that Firebase is initialized before running the app
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -36,12 +38,33 @@ class MyApp extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () async {
               try {
-                AuthService authService = AuthService();
+                GooglAuth authService = GooglAuth();
 
-                var user = await authService.signInWithGoogle();
-                print(user);
+                User? user = await authService.signInWithGoogle();
+                print(user!.email);
+                print(user.displayName);
+                print(user.photoURL);
+
+                Get.dialog(
+                  AlertDialog(
+                    title: Text("Image Preview"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.network(
+                          user.photoURL!,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(height: 10),
+                        Text("This is an image inside a dialog."),
+                      ],
+                    ),
+                  ),
+                );
               } catch (e) {
-                // ···
+                // Handle error
+                print('Error signing in: $e');
               }
             },
             child: const Text('Initialize Firebase'),

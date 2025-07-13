@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class AuthService {
+class GooglAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn =
       GoogleSignIn.instance; // Preferred way to get instance
 
   bool _isGoogleSignInInitialized = false; // Track initialization state
 
-  AuthService() {
+  GooglAuth() {
     // It's good practice to ensure initialization, but be careful with async in constructors.
     // Consider calling _initializeGoogleSignIn() explicitly at app startup or before first sign-in.
     _initializeGoogleSignIn();
@@ -50,6 +50,7 @@ class AuthService {
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.idToken,
+        idToken: googleAuth.idToken,
       );
 
       final UserCredential userCredential =
