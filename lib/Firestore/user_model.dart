@@ -33,7 +33,7 @@ class UserModel {
       userPhotoUrl: photo_url,
       userEmail: email,
       userFunction: function,
-      userId: id,
+      // Remove Id Because I won't push it Firestore auto generates it
     };
   }
 }
