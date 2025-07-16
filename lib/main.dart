@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_firebase/AuthGmail/signIn_service.dart';
+import 'package:flutter_firebase/Firestore/firestore_view.dart';
 import 'package:flutter_firebase/HomeView.dart';
 import 'firebase_options.dart';
 import 'package:get/get.dart';
@@ -27,12 +28,14 @@ class MyApp extends StatelessWidget {
     GooglAuth authService = GooglAuth();
 
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: authService.getCurrentUser() != null ? Homeview() : MainPage(),
+      home: authService.getCurrentUser() != null
+          ? Firestore_View()
+          : Firestore_View(),
     );
   }
 }
