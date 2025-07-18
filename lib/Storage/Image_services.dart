@@ -19,4 +19,18 @@ class ImageServices extends GetxController {
   void clearImages() {
     images.clear();
   }
+
+  // Delete image at a specific index
+  void deleteImageAt(int index) {
+    images.removeAt(index);
+  }
+
+  // Compress all images (returns list of compressed XFile)
+  // Note: Requires 'image' and 'path_provider' packages for actual compression.
+  // This is a placeholder for demonstration.
+  Future<List<XFile>> compressAllImages() async {
+    // TODO: Implement actual compression logic using image/image.dart or flutter_image_compress
+    // For now, just return the original images
+    return images.toList();
+  }
 }
