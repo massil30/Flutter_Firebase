@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_firebase/AuthGmail/signIn_service.dart';
 import 'package:flutter_firebase/Firestore/firestore_view.dart';
 import 'package:flutter_firebase/HomeView.dart';
+import 'package:flutter_firebase/Storage/Image_services.dart';
+import 'package:flutter_firebase/Storage/Storage_View.dart';
 import 'firebase_options.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +19,8 @@ void main() async {
   }).catchError((error) {
     debugPrint('Error initializing Firebase: $error');
   });
+  Get.put(ImageServices()); // Make ImageServices accessible globally
+
   runApp(MyApp());
 }
 
@@ -33,9 +37,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: authService.getCurrentUser() != null
-          ? Firestore_View()
-          : Firestore_View(),
+      home:
+          authService.getCurrentUser() != null ? StorageView() : StorageView(),
     );
   }
 }
